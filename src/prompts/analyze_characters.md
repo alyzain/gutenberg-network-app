@@ -16,7 +16,7 @@ Your task is to analyze a book excerpt and extract structured data on characters
 
 - Return a list of characters with:
   - `name`: Character name
-  - `count`: Total number of times the character speaks to another character
+  - `count`: Total number of times the character interacts with other characters, either as the speaker or the recipient.
   - `interactions`: Array of objects representing how many times they directly interacted with each other through speech
   - `quote`: One meaningful quote spoken by this character
   - Choose a quote that best reflects the tone or essence of their speech
@@ -35,7 +35,7 @@ Your task is to analyze a book excerpt and extract structured data on characters
 - Standardize character names (e.g., "ROMEO" vs "Romeo") to avoid duplicates.
 - Handle edge cases conservatively, such as characters with ambiguous names (e.g., "Servant" or "Messenger").
 - Exclude ambiguous interactions where the recipient is not explicitly named.
-- Avoid redundant characters by merging duplicate entries (e.g., "Ross" and "ROSS" should be combined into one entry).
+- Avoid redundant characters by merging duplicate entries (e.g., "Ross" , "ross" and "ROSS" should be combined into one entry).
 - Filter out characters with zero interactions or a `count` of `0` from the final JSON.
 - **Strictly return only the JSON object**: Do not include any additional text, explanations, or formatting such as "Here is the JSON output:" or enclosing triple backticks.
 
@@ -131,9 +131,15 @@ Your task is to analyze a book excerpt and extract structured data on characters
 }
 ```
 This is because:
-Romeo speaks 4 times: 2 with Juliet, 2 with Mercutio
-Juliet speaks 2 times: 2 with Romeo, 1 with Mercutio
-This means: Mercutio speaks 3 times: 2 with Romeo, 1 with Juliet
+Romeo interacts 4 times:
+    - 2 interactions with Juliet.
+    - 2 interactions with Mercutio.
+Juliet interacts 2 times:
+    - 2 interactions with Romeo (matching Romeo's interactions with Juliet).
+    - 1 interaction with Mercutio.
+Mercutio interacts 3 times:
+    - 2 interactions with Romeo.
+    - 1 interaction with Juliet.
 
 
 ### 3. Format and Proofread Your Output

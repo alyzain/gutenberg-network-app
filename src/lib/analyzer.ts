@@ -17,14 +17,20 @@ export async function analyzeBookText(fullText: string): Promise<AnalysisResult>
     const subset = fullText.slice(0, 10000)
     const chunks = splitIntoChunks(subset)
 
-    const results: Character[][] = []
+    const prompts = chunks.map(chunk =>
+        promptTemplate.replace('"""TEXT"""', `"""\n${chunk}\n"""`)
+    )
 
-    for (const chunk of chunks) {
-        const prompt = promptTemplate.replace('"""TEXT"""', `"""\n${chunk}\n"""`)
-        const parsed = await callGroq(prompt)
-        if (parsed?.characters) results.push(parsed.characters)
-    }
+    const results = await Promise.allSettled(
+        prompts.map(prompt => callGroq(prompt))
+    )
 
-    return mergeCharacters(results.flat())
+    const successfulCharacters = results
+        .filter((res): res is PromiseFulfilledResult<{ characters: Character[] }> =>
+            res.status === 'fulfilled' && res.value?.characters
+        )
+        .flatMap(res => res.value.characters)
+
+    return mergeCharacters(successfulCharacters)
 }
 

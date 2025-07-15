@@ -26,10 +26,11 @@ export function mergeCharacters(chars: Character[]): AnalysisResult {
   const map = new Map<string, Character>()
 
   for (const c of chars) {
-    const existing = map.get(c.name)
+    const nameKey = c.name.trim().toLowerCase()
+    const existing = map.get(nameKey)
 
     if (!existing) {
-      map.set(c.name, { ...c })
+      map.set(nameKey, { ...c })
     } else {
       existing.count += c.count
 
@@ -38,11 +39,15 @@ export function mergeCharacters(chars: Character[]): AnalysisResult {
         match ? (match.count += i.count) : existing.interactions.push({ ...i })
       }
 
-      if (!existing.quote) {
+      if (!existing.quote && c.quote) {
         existing.quote = { ...c.quote }
       }
     }
   }
 
-  return { characters: Array.from(map.values()) }
+  const merged = Array.from(map.values())
+
+  const filtered = merged.filter(c => c.count > 0 && c.interactions.length > 0)
+
+  return { characters: filtered }
 }

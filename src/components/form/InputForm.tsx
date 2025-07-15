@@ -30,7 +30,7 @@ export function InputForm({ onSubmit, isLoading = false }: InputFormProps) {
           id="book-id"
           value={bookId}
           onChange={(e) => setBookId(e.target.value)}
-          placeholder="e.g. 1787 (Hamlet)"
+          placeholder="e.g. 1524 (Hamlet), 27761 (Hamlet), 1727 (The Odyssey), 1513 (Romeo and Juliet)"
           disabled={isLoading}
           className="flex-1"
         />

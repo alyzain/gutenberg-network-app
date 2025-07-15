@@ -20,7 +20,11 @@ export default function Home() {
       <InputForm onSubmit={analyze} isLoading={loading} />
 
       {loading && <p className="text-center animate-pulse">Analyzing book...</p>}
-      {error && <p className="text-center text-red-600">{error}</p>}
+      {error && (
+        <p className="text-center text-red-600">
+          Oops! We couldn't analyze the book this time. Please try again in a one minute.
+        </p>
+      )}
 
       {!loading && data && (
         <>
